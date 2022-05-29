@@ -23,6 +23,7 @@ class CalendarCollectionViewCell: UICollectionViewCell {
     func configureLabel(text: String) {
         self.addSubview(dayLabel)
         self.dayLabel.text = text
+        self.dayLabel.textAlignment = .center
         self.dayLabel.font = .systemFont(ofSize: 12, weight: .bold)
         
         self.dayLabel.translatesAutoresizingMaskIntoConstraints = false

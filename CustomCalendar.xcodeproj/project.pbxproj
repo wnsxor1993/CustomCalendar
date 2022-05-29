@@ -13,6 +13,7 @@
 		D2EA19FE28439D5B00C75419 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2EA19FD28439D5B00C75419 /* Assets.xcassets */; };
 		D2EA1A0128439D5B00C75419 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2EA19FF28439D5B00C75419 /* LaunchScreen.storyboard */; };
 		D2EA1A0B2843A81D00C75419 /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2EA1A0A2843A81D00C75419 /* CalendarCollectionViewCell.swift */; };
+		D2EA1A132843DB5400C75419 /* CalendarCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2EA1A122843DB5400C75419 /* CalendarCollectionLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		D2EA1A0028439D5B00C75419 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D2EA1A0228439D5B00C75419 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2EA1A0A2843A81D00C75419 /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
+		D2EA1A122843DB5400C75419 /* CalendarCollectionLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				D2EA19F428439D5A00C75419 /* AppDelegate.swift */,
 				D2EA19F628439D5A00C75419 /* SceneDelegate.swift */,
 				D2EA19F828439D5A00C75419 /* ViewController.swift */,
+				D2EA1A122843DB5400C75419 /* CalendarCollectionLayout.swift */,
 				D2EA1A0A2843A81D00C75419 /* CalendarCollectionViewCell.swift */,
 				D2EA19FD28439D5B00C75419 /* Assets.xcassets */,
 				D2EA19FF28439D5B00C75419 /* LaunchScreen.storyboard */,
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2EA1A132843DB5400C75419 /* CalendarCollectionLayout.swift in Sources */,
 				D2EA19F928439D5A00C75419 /* ViewController.swift in Sources */,
 				D2EA19F528439D5A00C75419 /* AppDelegate.swift in Sources */,
 				D2EA19F728439D5A00C75419 /* SceneDelegate.swift in Sources */,

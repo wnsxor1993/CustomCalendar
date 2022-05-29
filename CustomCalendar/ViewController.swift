@@ -11,7 +11,7 @@ class ViewController: UIViewController {
     
     private lazy var weekStackView = UIStackView()
     private lazy var yearMonthLabel = UILabel()
-    private lazy var calendarCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private lazy var calendarCollectionView = UICollectionView(frame: .zero, collectionViewLayout: self.getCollectionViewLayout())
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +21,12 @@ class ViewController: UIViewController {
 }
 
 private extension ViewController {
+    
+    func getCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+        UICollectionViewCompositionalLayout { (section, _) -> NSCollectionLayoutSection? in
+            return CalendarCollectionLayout().create()
+        }
+    }
     
     func setViews() {
         self.configureWeekStackView()
