@@ -13,9 +13,12 @@ class ViewController: UIViewController {
     private lazy var yearMonthLabel = UILabel()
     private lazy var calendarCollectionView = UICollectionView(frame: .zero, collectionViewLayout: self.getCollectionViewLayout())
 
+    let calendarDateFormatter = CalendarDateFormatter()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
+        self.updateCalendarData()
         self.setViews()
     }
 }
@@ -26,6 +29,10 @@ private extension ViewController {
         UICollectionViewCompositionalLayout { (section, _) -> NSCollectionLayoutSection? in
             return CalendarCollectionLayout().create()
         }
+    }
+    
+    func updateCalendarData() {
+        self.calendarDateFormatter.updateCurrentMonthDays()
     }
     
     func setViews() {
@@ -68,7 +75,7 @@ private extension ViewController {
     
     func configureYearMonthLabel() {
         self.view.addSubview(yearMonthLabel)
-        self.yearMonthLabel.text = "2022년 5월"
+        self.yearMonthLabel.text = self.calendarDateFormatter.getYearMonthText()
         self.yearMonthLabel.font = .systemFont(ofSize: 16, weight: .bold)
         
         self.yearMonthLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -99,13 +106,17 @@ private extension ViewController {
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 40
+        return self.calendarDateFormatter.days.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCollectionViewCell.identifier, for: indexPath) as? CalendarCollectionViewCell else { return UICollectionViewCell()}
         
-        cell.configureLabel(text: "0")
+        cell.configureLabel(text: self.calendarDateFormatter.days[indexPath.item])
+        
+        if indexPath.item % 7 == 0 {
+            cell.setSundayColor()
+        }
         
         return cell
     }
