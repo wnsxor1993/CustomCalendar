@@ -11,7 +11,6 @@ class CalendarDateFormatter {
     private let calendar = Calendar.current
     private let dateFormatter = DateFormatter()
     private var nowCalendarDate = Date()
-    private(set) var days = [String]()
     
     init() {
         self.configureCalendar()
@@ -23,19 +22,21 @@ class CalendarDateFormatter {
         return yearMonthText
     }
     
-    func updateCurrentMonthDays() {
-        self.days.removeAll()
+    func updateCurrentMonthDays() -> [String] {
+        var days = [String]()
         
         let startDayOfWeek = self.getStartingDayOfWeek()
         let totalDaysOfMonth = startDayOfWeek + self.getEndDateOfMonth()
         
         for day in 0..<totalDaysOfMonth {
             if day < startDayOfWeek {
-                self.days.append("")
+                days.append("")
             } else {
-                self.days.append("\(day - startDayOfWeek + 1)")
+                days.append("\(day - startDayOfWeek + 1)")
             }
         }
+        
+        return days
     }
 }
 

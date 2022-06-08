@@ -18,7 +18,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
-        self.updateCalendarData()
         self.setViews()
     }
 }
@@ -29,10 +28,6 @@ private extension ViewController {
         UICollectionViewCompositionalLayout { (section, _) -> NSCollectionLayoutSection? in
             return CalendarCollectionLayout().create()
         }
-    }
-    
-    func updateCalendarData() {
-        self.calendarDateFormatter.updateCurrentMonthDays()
     }
     
     func setViews() {
@@ -106,13 +101,13 @@ private extension ViewController {
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.calendarDateFormatter.days.count
+        return self.calendarDateFormatter.updateCurrentMonthDays().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCollectionViewCell.identifier, for: indexPath) as? CalendarCollectionViewCell else { return UICollectionViewCell()}
         
-        cell.configureLabel(text: self.calendarDateFormatter.days[indexPath.item])
+        cell.configureLabel(text: self.calendarDateFormatter.updateCurrentMonthDays()[indexPath.item])
         
         if indexPath.item % 7 == 0 {
             cell.setSundayColor()
