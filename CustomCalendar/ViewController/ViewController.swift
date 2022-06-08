@@ -10,15 +10,13 @@ import UIKit
 class ViewController: UIViewController {
     
     private lazy var weekStackView = UIStackView()
-    private lazy var yearMonthLabel = UILabel()
     private lazy var calendarCollectionView = UICollectionView(frame: .zero, collectionViewLayout: self.getCollectionViewLayout())
 
-    let calendarDateFormatter = CalendarDateFormatter()
+    let calendarManager = CalendarManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
-        self.updateCalendarData()
         self.setViews()
     }
 }
@@ -31,13 +29,8 @@ private extension ViewController {
         }
     }
     
-    func updateCalendarData() {
-        self.calendarDateFormatter.updateCurrentMonthDays()
-    }
-    
     func setViews() {
         self.configureWeekStackView()
-        self.configureYearMonthLabel()
         self.configureCalendarCollectionView()
     }
     
@@ -73,31 +66,18 @@ private extension ViewController {
         }
     }
     
-    func configureYearMonthLabel() {
-        self.view.addSubview(yearMonthLabel)
-        self.yearMonthLabel.text = self.calendarDateFormatter.getYearMonthText()
-        self.yearMonthLabel.font = .systemFont(ofSize: 16, weight: .bold)
-        
-        self.yearMonthLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.yearMonthLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            self.yearMonthLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            self.yearMonthLabel.topAnchor.constraint(equalTo: self.weekStackView.bottomAnchor, constant: 24),
-            self.yearMonthLabel.heightAnchor.constraint(equalToConstant: 23)
-        ])
-    }
-    
     func configureCalendarCollectionView() {
         self.view.addSubview(calendarCollectionView)
         self.calendarCollectionView.dataSource = self
         self.calendarCollectionView.delegate = self
         self.calendarCollectionView.register(CalendarCollectionViewCell.self, forCellWithReuseIdentifier: CalendarCollectionViewCell.identifier)
+        self.calendarCollectionView.register(CalendarCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CalendarCollectionHeader.identifier)
         
         self.calendarCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.calendarCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             self.calendarCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            self.calendarCollectionView.topAnchor.constraint(equalTo: self.yearMonthLabel.bottomAnchor, constant: 16),
+            self.calendarCollectionView.topAnchor.constraint(equalTo: self.weekStackView.bottomAnchor),
             self.calendarCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
     }
@@ -105,19 +85,27 @@ private extension ViewController {
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return self.calendarManager.yearMonths.count
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.calendarDateFormatter.days.count
+        return self.calendarManager.monthDays[section].count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCollectionViewCell.identifier, for: indexPath) as? CalendarCollectionViewCell else { return UICollectionViewCell()}
         
-        cell.configureLabel(text: self.calendarDateFormatter.days[indexPath.item])
-        
-        if indexPath.item % 7 == 0 {
-            cell.setSundayColor()
-        }
+        cell.configureLabel(text: self.calendarManager.monthDays[indexPath.section][indexPath.item])
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CalendarCollectionHeader.identifier, for: indexPath) as? CalendarCollectionHeader else { return UICollectionReusableView() }
+        
+        headerView.setHeaderText(text: self.calendarManager.getMonthsToString(section: indexPath.section))
+        
+        return headerView
     }
 }
