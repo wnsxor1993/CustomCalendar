@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     private lazy var yearMonthLabel = UILabel()
     private lazy var calendarCollectionView = UICollectionView(frame: .zero, collectionViewLayout: self.getCollectionViewLayout())
 
-    let calendarDateFormatter = CalendarDateFormatter()
+    let calendarManager = CalendarManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +70,7 @@ private extension ViewController {
     
     func configureYearMonthLabel() {
         self.view.addSubview(yearMonthLabel)
-        self.yearMonthLabel.text = self.calendarDateFormatter.getYearMonthText()
+        self.yearMonthLabel.text = self.calendarManager.getMonthsToString(section: 0)
         self.yearMonthLabel.font = .systemFont(ofSize: 16, weight: .bold)
         
         self.yearMonthLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -100,18 +100,18 @@ private extension ViewController {
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return self.calendarManager.yearMonths.count
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.calendarDateFormatter.updateCurrentMonthDays().count
+        return self.calendarManager.monthDays[section].count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCollectionViewCell.identifier, for: indexPath) as? CalendarCollectionViewCell else { return UICollectionViewCell()}
         
-        cell.configureLabel(text: self.calendarDateFormatter.updateCurrentMonthDays()[indexPath.item])
-        
-        if indexPath.item % 7 == 0 {
-            cell.setSundayColor()
-        }
+        cell.configureLabel(text: self.calendarManager.monthDays[indexPath.section][indexPath.item])
         
         return cell
     }

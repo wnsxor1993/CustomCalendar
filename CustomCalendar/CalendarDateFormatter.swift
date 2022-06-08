@@ -7,26 +7,30 @@
 
 import Foundation
 
-class CalendarDateFormatter {
-    private let calendar = Calendar.current
+struct CalendarDateFormatter {
+    
     private let dateFormatter = DateFormatter()
-    private var nowCalendarDate = Date()
+    private var calendarComponent: Calendar?
     
     init() {
-        self.configureCalendar()
+        self.configureDateFormatter()
     }
     
-    func getYearMonthText() -> String {
-        let yearMonthText = self.dateFormatter.string(from: self.nowCalendarDate)
+    mutating func setCalendarComponent(calendar: Calendar) {
+        self.calendarComponent = calendar
+    }
+    
+    func getYearMonthText(calendarDate: Date) -> String {
+        let yearMonthText = self.dateFormatter.string(from: calendarDate)
         
         return yearMonthText
     }
     
-    func updateCurrentMonthDays() -> [String] {
+    func updateCurrentMonthDays(calendarDate: Date) -> [String] {
         var days = [String]()
         
-        let startDayOfWeek = self.getStartingDayOfWeek()
-        let totalDaysOfMonth = startDayOfWeek + self.getEndDateOfMonth()
+        let startDayOfWeek = self.getStartingDayOfWeek(date: calendarDate)
+        let totalDaysOfMonth = startDayOfWeek + self.getEndDateOfMonth(date: calendarDate)
         
         for day in 0..<totalDaysOfMonth {
             if day < startDayOfWeek {
@@ -42,17 +46,17 @@ class CalendarDateFormatter {
 
 private extension CalendarDateFormatter {
     
-    func getStartingDayOfWeek() -> Int {
-        return self.calendar.component(.weekday, from: self.nowCalendarDate) - 1
+    func getStartingDayOfWeek(date: Date) -> Int {
+        guard let calendar = calendarComponent else { return 0 }
+        return calendar.component(.weekday, from: date) - 1
     }
     
-    func getEndDateOfMonth() -> Int {
-        return self.calendar.range(of: .day, in: .month, for: self.nowCalendarDate)?.count ?? 0
+    func getEndDateOfMonth(date: Date) -> Int {
+        guard let calendar = calendarComponent else { return 0 }
+        return calendar.range(of: .day, in: .month, for: date)?.count ?? 0
     }
     
-    func configureCalendar() {
-        let components = self.calendar.dateComponents([.year, .month], from: Date())
-        self.nowCalendarDate = self.calendar.date(from: components) ?? Date()
+    func configureDateFormatter() {
         self.dateFormatter.dateFormat = "yyyy년 MM월"
     }
 }
